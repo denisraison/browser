@@ -12,6 +12,9 @@ var xpath []byte
 //go:embed polyfills/FastestSmallestTextEncoderDecoder/EncoderDecoderTogether.min.js
 var textEncoderDecoder []byte
 
+//go:embed polyfills/css/css_style_sheet.js
+var cssStyleSheet []byte
+
 func InstallPolyfills[T any](host js.ScriptEngine[T]) {
 	host.InstallPolyfill(`
 		FormData.prototype.forEach = function(cb) {
@@ -54,4 +57,15 @@ func InstallPolyfills[T any](host js.ScriptEngine[T]) {
 		Object.setPrototypeOf(DOMException, Error)
 		Object.setPrototypeOf(DOMException.prototype, Error.prototype)
 	`, "gost-dom/polyfills/errors.js")
+	host.InstallPolyfill(string(cssStyleSheet), "gost-dom/polyfills/css-style-sheet.js")
+	host.InstallPolyfill(`
+		if (typeof globalThis.CSS === "undefined") {
+			globalThis.CSS = {
+				escape(value) {
+					return String(value).replace(/[!"#$%&'()*+,.\/:;<=>?@\[\\\]^\x60{|}~]/g, "\\$&");
+				},
+				supports() { return false; },
+			};
+		}
+	`, "gost-dom/polyfills/css-namespace.js")
 }
