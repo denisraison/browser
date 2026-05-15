@@ -13,9 +13,9 @@ func NewReadyStateSuite(h html.ScriptEngine) *ReadyStateSuite {
 	return &ReadyStateSuite{ScriptHostSuite: *NewScriptHostSuite(h)}
 }
 
-func (s *ReadyStateSuite) TestReadyStateDefinedAfterParse() {
-	// After parseReader returns, DOMContentLoaded + load have both been
-	// dispatched, so readyState should be "complete".
+func (s *ReadyStateSuite) TestReadyStateCompleteAfterParse() {
+	// After parseReader returns, document.body exists, so readyState reads
+	// as "complete".
 	s.Expect(s.Eval(`document.readyState`)).To(Equal("complete"))
 }
 
