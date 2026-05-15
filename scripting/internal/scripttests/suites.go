@@ -64,6 +64,7 @@ func RunSuites(t *testing.T, e html.ScriptEngine) {
 	t.Run("Error handling", func(t *testing.T) { testErrorHandling(t, e) })
 	t.Run("html", func(t *testing.T) { htmlsuite.RunHtmlSuite(t, e) })
 	t.Run("dom", func(t *testing.T) { domsuite.RunDomSuite(t, e) })
+	t.Run("Storage", runSuite(NewStorageSuite(e)))
 }
 
 type dummyContext struct {

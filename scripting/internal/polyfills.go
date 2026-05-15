@@ -15,6 +15,9 @@ var textEncoderDecoder []byte
 //go:embed polyfills/iterable/iterable.js
 var iterable []byte
 
+//go:embed polyfills/storage/storage.js
+var webStorage []byte
+
 func InstallPolyfills[T any](host js.ScriptEngine[T]) {
 	host.InstallPolyfill(`
 		FormData.prototype.forEach = function(cb) {
@@ -58,4 +61,5 @@ func InstallPolyfills[T any](host js.ScriptEngine[T]) {
 		Object.setPrototypeOf(DOMException, Error)
 		Object.setPrototypeOf(DOMException.prototype, Error.prototype)
 	`, "gost-dom/polyfills/errors.js")
+	host.InstallPolyfill(string(webStorage), "gost-dom/polyfills/storage.js")
 }
