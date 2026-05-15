@@ -1,9 +1,6 @@
 package fetch
 
 import (
-	"fmt"
-
-	"github.com/gost-dom/browser/internal/constants"
 	"github.com/gost-dom/browser/internal/fetch"
 	"github.com/gost-dom/browser/scripting/internal/codec"
 	"github.com/gost-dom/browser/scripting/internal/js"
@@ -48,19 +45,19 @@ func decodeRequestInit[T any](
 		"body":    codec.OptDecoder[T](codec.DecodeRequestBody, fetch.WithBody),
 		"headers": codec.OptDecoder[T](decodeHeadersInit, fetch.WithHeaders),
 	}
-	for _, optName := range missingRequestOptions {
+	// These RequestInit options are accepted and parsed but otherwise ignored,
+	// since this in-process browser does not perform real network requests
+	// where they would matter (CORS, caching, redirects, etc.). Without this,
+	// clients like htmx that always set mode/credentials would fail.
+	for _, optName := range ignoredRequestOptions {
 		options[optName] = func(js.Scope[T], js.Value[T]) (fetch.RequestOption, error) {
-			return nil, fmt.Errorf(
-				"gost-dom/fetch: decode RequestInit: %s option not yet supported. %s",
-				optName,
-				constants.MISSING_FEATURE_ISSUE_URL,
-			)
+			return func(*fetch.Request) {}, nil
 		}
 	}
 	return codec.DecodeOptions(scope, val, options)
 }
 
-var missingRequestOptions = []string{
+var ignoredRequestOptions = []string{
 	"referrer", "referrerPolicy",
 	"mode", "credentials", "cache", "redirect", "integrity",
 	"keepalive", "duplex", "priority", "window",
