@@ -4,6 +4,11 @@
 // "interactive" after DOMContentLoaded, "complete" after load. Without this,
 // the property is undefined and libraries that branch on it (htmx 4, jQuery's
 // ready, et al.) take the wrong path during bootstrap.
+//
+// State is flipped by intercepting EventTarget.prototype.dispatchEvent rather
+// than addEventListener, because the document instance is recreated during
+// parseReader after polyfills run, so a listener attached at polyfill time
+// would target a stale document.
 
 (function () {
   "use strict";
@@ -16,10 +21,13 @@
     get() { return state; },
   });
 
-  if (typeof document !== "undefined" && typeof document.addEventListener === "function") {
-    document.addEventListener("DOMContentLoaded", () => { state = "interactive"; });
-  }
-  if (typeof window !== "undefined" && typeof window.addEventListener === "function") {
-    window.addEventListener("load", () => { state = "complete"; });
+  if (typeof EventTarget !== "undefined" && EventTarget.prototype.dispatchEvent) {
+    const orig = EventTarget.prototype.dispatchEvent;
+    EventTarget.prototype.dispatchEvent = function (ev) {
+      const t = ev && ev.type;
+      if (t === "DOMContentLoaded" && state === "loading") state = "interactive";
+      else if (t === "load" && state !== "complete") state = "complete";
+      return orig.call(this, ev);
+    };
   }
 })();
