@@ -12,12 +12,16 @@ var xpath []byte
 //go:embed polyfills/FastestSmallestTextEncoderDecoder/EncoderDecoderTogether.min.js
 var textEncoderDecoder []byte
 
+//go:embed polyfills/iterable/iterable.js
+var iterable []byte
+
 func InstallPolyfills[T any](host js.ScriptEngine[T]) {
 	host.InstallPolyfill(`
 		FormData.prototype.forEach = function(cb) {
 			return Array.from(this).forEach(([k,v]) => { cb(v,k) })
 		}
 	`, "gost-dom/polyfills/formdata.js")
+	host.InstallPolyfill(string(iterable), "gost-dom/polyfills/iterable.js")
 	host.InstallPolyfill(`
 		Node.ELEMENT_NODE = 1;
 		Node.ATTRIBUTE_NODE = 2;
