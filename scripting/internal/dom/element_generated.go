@@ -53,10 +53,6 @@ func Element_hasAttributes[T any](cbCtx js.CallbackContext[T]) (res js.Value[T],
 	return codec.EncodeCallbackErrorf(cbCtx, "Element.Element_hasAttributes: Not implemented. Create an issue: https://github.com/gost-dom/browser/issues")
 }
 
-func Element_getAttributeNames[T any](cbCtx js.CallbackContext[T]) (res js.Value[T], err error) {
-	return codec.EncodeCallbackErrorf(cbCtx, "Element.Element_getAttributeNames: Not implemented. Create an issue: https://github.com/gost-dom/browser/issues")
-}
-
 func Element_getAttribute[T any](cbCtx js.CallbackContext[T]) (res js.Value[T], err error) {
 	instance, errInst := js.As[dom.Element](cbCtx.Instance())
 	if errInst != nil {

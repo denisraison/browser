@@ -22,6 +22,18 @@ func decodeElement[T any](s js.Scope[T], v js.Value[T]) (dom.Element, error) {
 	return codec.DecodeAs[dom.Element](s, v)
 }
 
+func Element_getAttributeNames[T any](cbCtx js.CallbackContext[T]) (js.Value[T], error) {
+	instance, err := js.As[dom.Element](cbCtx.Instance())
+	if err != nil {
+		return nil, err
+	}
+	var names []js.Value[T]
+	for a := range instance.Attributes().All() {
+		names = append(names, cbCtx.NewString(a.Name()))
+	}
+	return cbCtx.NewArray(names...), nil
+}
+
 func Element_className[T any](cbCtx js.CallbackContext[T]) (res js.Value[T], err error) {
 	instance, err := js.As[dom.Element](cbCtx.Instance())
 	if err != nil {
