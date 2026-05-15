@@ -12,6 +12,9 @@ var xpath []byte
 //go:embed polyfills/FastestSmallestTextEncoderDecoder/EncoderDecoderTogether.min.js
 var textEncoderDecoder []byte
 
+//go:embed polyfills/ready_state/ready_state.js
+var readyState []byte
+
 //go:embed polyfills/iterable/iterable.js
 var iterable []byte
 
@@ -60,6 +63,7 @@ func InstallPolyfills[T any](host js.ScriptEngine[T]) {
 			return Array.from(this).forEach(([k,v]) => { cb(v,k) })
 		}
 	`, "gost-dom/polyfills/formdata.js")
+	host.InstallPolyfill(string(readyState), "gost-dom/polyfills/ready-state.js")
 	host.InstallPolyfill(string(iterable), "gost-dom/polyfills/iterable.js")
 	host.InstallPolyfill(`
 		Node.ELEMENT_NODE = 1;
