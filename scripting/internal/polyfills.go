@@ -21,6 +21,39 @@ var webStorage []byte
 //go:embed polyfills/css/css_style_sheet.js
 var cssStyleSheet []byte
 
+//go:embed polyfills/crypto/crypto.js
+var webCrypto []byte
+
+//go:embed polyfills/match_media/match_media.js
+var matchMedia []byte
+
+//go:embed polyfills/computed_style/computed_style.js
+var computedStyle []byte
+
+//go:embed polyfills/client_rects/client_rects.js
+var clientRects []byte
+
+//go:embed polyfills/observers/observers.js
+var observers []byte
+
+//go:embed polyfills/web_animations/web_animations.js
+var webAnimations []byte
+
+//go:embed polyfills/popover/popover.js
+var popover []byte
+
+//go:embed polyfills/dialog/dialog.js
+var dialog []byte
+
+//go:embed polyfills/view_transitions/view_transitions.js
+var viewTransitions []byte
+
+//go:embed polyfills/custom_elements/custom_elements.js
+var customElements []byte
+
+//go:embed polyfills/focus/focus.js
+var focus []byte
+
 func InstallPolyfills[T any](host js.ScriptEngine[T]) {
 	host.InstallPolyfill(`
 		FormData.prototype.forEach = function(cb) {
@@ -76,4 +109,15 @@ func InstallPolyfills[T any](host js.ScriptEngine[T]) {
 			};
 		}
 	`, "gost-dom/polyfills/css-namespace.js")
+	host.InstallPolyfill(string(webCrypto), "gost-dom/polyfills/crypto.js")
+	host.InstallPolyfill(string(matchMedia), "gost-dom/polyfills/match-media.js")
+	host.InstallPolyfill(string(computedStyle), "gost-dom/polyfills/computed-style.js")
+	host.InstallPolyfill(string(clientRects), "gost-dom/polyfills/client-rects.js")
+	host.InstallPolyfill(string(observers), "gost-dom/polyfills/observers.js")
+	host.InstallPolyfill(string(webAnimations), "gost-dom/polyfills/web-animations.js")
+	host.InstallPolyfill(string(popover), "gost-dom/polyfills/popover.js")
+	host.InstallPolyfill(string(dialog), "gost-dom/polyfills/dialog.js")
+	host.InstallPolyfill(string(viewTransitions), "gost-dom/polyfills/view-transitions.js")
+	host.InstallPolyfill(string(customElements), "gost-dom/polyfills/custom-elements.js")
+	host.InstallPolyfill(string(focus), "gost-dom/polyfills/focus.js")
 }

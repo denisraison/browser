@@ -66,6 +66,17 @@ func RunSuites(t *testing.T, e html.ScriptEngine) {
 	t.Run("dom", func(t *testing.T) { domsuite.RunDomSuite(t, e) })
 	t.Run("Storage", runSuite(NewStorageSuite(e)))
 	t.Run("CSSStyleSheet", runSuite(NewCSSStyleSheetSuite(e)))
+	t.Run("Crypto", runSuite(NewCryptoSuite(e)))
+	t.Run("MatchMedia", runSuite(NewMatchMediaSuite(e)))
+	t.Run("ComputedStyle", runSuite(NewComputedStyleSuite(e)))
+	t.Run("ClientRects", runSuite(NewClientRectsSuite(e)))
+	t.Run("Observers", runSuite(NewObserversSuite(e)))
+	t.Run("WebAnimations", runSuite(NewWebAnimationsSuite(e)))
+	t.Run("Popover", runSuite(NewPopoverSuite(e)))
+	t.Run("Dialog", runSuite(NewDialogSuite(e)))
+	t.Run("ViewTransitions", runSuite(NewViewTransitionsSuite(e)))
+	t.Run("CustomElements", runSuite(NewCustomElementsSuite(e)))
+	t.Run("Focus", runSuite(NewFocusSuite(e)))
 }
 
 type dummyContext struct {
